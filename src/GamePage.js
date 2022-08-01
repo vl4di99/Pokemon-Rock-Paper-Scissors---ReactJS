@@ -4,6 +4,8 @@ import "./GamePage.css";
 import PokeCard from "./components/PokeCard/PokeCard";
 import axios from "axios";
 
+import axios from "axios";
+
 function Game() {
   const [pokemonsInfo, setPokemonsInfo] = useState({});
   let pokemonLeft;
