@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion/dist/framer-motion";
+import { AnimatePresence } from "framer-motion";
 
-import StartPage from "../src/StartPage";
-import GamePage from "../src/GamePage";
-import EndScreen from "../src/EndScreen";
+import StartPage from "../StartPage";
+import GamePage from "../GamePage";
+import EndScreen from "../EndScreen";
 
 function AnimatedRoutes() {
   const location = useLocation();

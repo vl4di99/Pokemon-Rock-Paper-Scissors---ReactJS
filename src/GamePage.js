@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion/dist/framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import "./GamePage.css";
 
 function Game() {
