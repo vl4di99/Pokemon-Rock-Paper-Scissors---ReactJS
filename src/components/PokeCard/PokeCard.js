@@ -3,7 +3,6 @@ import { Box } from "@chakra-ui/react";
 
 export default function PokeCard({ pokemonImage }) {
   const formatNumber = (number) => {
-    console.log(number);
     let id = number.toString();
     while (id.length < 3) id = "0" + id;
     return id;
