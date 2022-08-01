@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "./GamePage.css";
+import PokeCard from "./components/PokeCard/PokeCard";
+import axios from "axios";
 
 import axios from "axios";
 
 function Game() {
+  const [pokemonsInfo, setPokemonsInfo] = useState({});
   let pokemonLeft;
   let pokemonRight;
 
@@ -15,13 +18,13 @@ function Game() {
     } while (pokemonLeft === pokemonRight);
   };
 
-  const getPokemonsData = () => {
+  useEffect(() => {
     randomPokemons();
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonLeft}/`)
       .then((res) => {
         pokemonLeft = res.data;
-        console.log(pokemonLeft);
+        // console.log(pokemonLeft);
       })
       .catch((err) => {
         console.log(err);
@@ -31,14 +34,19 @@ function Game() {
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonRight}/`)
       .then((res) => {
         pokemonRight = res.data;
-        console.log(pokemonRight);
+        // console.log(pokemonRight);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-  getPokemonsData();
+    // console.log(pokemonLeft);
+    setPokemonsInfo({
+      pokemonLeft: pokemonLeft,
+      pokemonRight: pokemonRight,
+    });
+  }, []);
 
+  // console.log(pokemonsInfo);
   return (
     <motion.div
       initial={{ width: 0 }}
@@ -46,6 +54,8 @@ function Game() {
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
     >
       This is game page
+      <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
+      <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
     </motion.div>
   );
 }
