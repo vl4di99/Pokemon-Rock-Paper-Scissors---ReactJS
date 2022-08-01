@@ -4,8 +4,6 @@ import "./GamePage.css";
 import PokeCard from "./components/PokeCard/PokeCard";
 import axios from "axios";
 
-import axios from "axios";
-
 function Game() {
   const [pokemonsInfo, setPokemonsInfo] = useState({});
   let pokemonLeft;
@@ -22,6 +20,10 @@ function Game() {
     do {
       pokemonRight = Math.floor(Math.random() * 151 + 1);
     } while (pokemonLeft === pokemonRight);
+    setPokemonsInfo({
+      pokemonLeft: pokemonLeft,
+      pokemonRight: pokemonRight,
+    });
   };
 
   const getPokemonsData = async () => {
@@ -47,11 +49,6 @@ function Game() {
       .catch((err) => {
         console.log(err);
       });
-
-    setPokemonsInfo({
-      pokemonLeft: pokemonLeft,
-      pokemonRight: pokemonRight,
-    });
 
     await getPokeTypes();
   };
