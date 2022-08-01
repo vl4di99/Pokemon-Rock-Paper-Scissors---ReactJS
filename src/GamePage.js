@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Game.css";
+import "./GamePage.css";
 
 function Game() {
   const [roundNo, setRoundNo] = useState(0);
