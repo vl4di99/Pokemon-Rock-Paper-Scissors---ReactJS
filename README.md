@@ -1,3 +1,9 @@
+Commands, which need to be used:
+
+git clone https://github.com/vl4di99/Pokemon-Rock-Paper-Scissors-ReactJS.git \
+npm install \
+npm start \
+ 
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
