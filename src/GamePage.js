@@ -87,7 +87,6 @@ function Game() {
     getPokemonsData();
   }, []);
 
-  // console.log(pokemonsInfo);
   return (
     <motion.div
       initial={{ width: 0 }}
