@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./GamePage.css";
 
@@ -7,6 +7,12 @@ import axios from "axios";
 function Game() {
   let pokemonLeft;
   let pokemonRight;
+  const [poke1BaseXP, setPoke1BaseXP] = useState("");
+  const [poke2BaseXP, setPoke2BaseXP] = useState("");
+  let poke1TypesURL;
+  let poke2TypesURL;
+  const poke1TypesList = [];
+  const poke2TypesList = [];
 
   const randomPokemons = () => {
     pokemonLeft = Math.floor(Math.random() * 151 + 1);
@@ -15,29 +21,66 @@ function Game() {
     } while (pokemonLeft === pokemonRight);
   };
 
-  const getPokemonsData = () => {
+  const getPokemonsData = async () => {
     randomPokemons();
-    axios
+    await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonLeft}/`)
       .then((res) => {
         pokemonLeft = res.data;
-        console.log(pokemonLeft);
+        setPoke1BaseXP(pokemonLeft.base_experience);
+        poke1TypesURL = pokemonLeft.types;
       })
       .catch((err) => {
         console.log(err);
       });
 
-    axios
+    await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonRight}/`)
       .then((res) => {
         pokemonRight = res.data;
-        console.log(pokemonRight);
+        setPoke2BaseXP(pokemonRight.base_experience);
+        poke2TypesURL = pokemonRight.types;
       })
       .catch((err) => {
         console.log(err);
       });
+
+    await getPokeTypes();
   };
-  getPokemonsData();
+
+  const getPokeTypes = async () => {
+    console.log("1: ", poke1TypesURL);
+    console.log("2: ", poke2TypesURL);
+    poke1TypesURL.map((element, index) => {
+      axios.get(element?.type?.url).then((res) => {
+        poke1TypesList.push(res.data);
+      });
+    });
+    poke2TypesURL.map((element, index) => {
+      axios.get(element?.type?.url).then((res) => {
+        poke2TypesList.push(res.data);
+      });
+    });
+    console.log(poke1TypesList);
+    console.log(poke2TypesList);
+    calculateScore();
+  };
+
+  const calculateScore = () => {
+    for (let i = 0; i < poke1TypesList.length; i++) {
+      for (let j = 0; j < poke2TypesList.length; j++) {
+        poke1TypesList[i].damage_relations.double_damage_from.map(
+          (element1) => {
+            console.log(element1);
+          }
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    getPokemonsData();
+  }, []);
 
   return (
     <motion.div
@@ -45,7 +88,8 @@ function Game() {
       animate={{ width: "100%" }}
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
     >
-      This is game page
+      <div>{poke1BaseXP}</div>
+      <div>{poke2BaseXP}</div>
     </motion.div>
   );
 }
