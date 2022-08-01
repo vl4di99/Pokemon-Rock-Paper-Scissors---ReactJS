@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./GamePage.css";
+import PokeCard from "./components/PokeCard/PokeCard";
+import axios from "axios";
 
 import axios from "axios";
 
 function Game() {
+  const [pokemonsInfo, setPokemonsInfo] = useState({});
   let pokemonLeft;
   let pokemonRight;
   const [poke1BaseXP, setPoke1BaseXP] = useState("");
@@ -45,6 +48,11 @@ function Game() {
         console.log(err);
       });
 
+    setPokemonsInfo({
+      pokemonLeft: pokemonLeft,
+      pokemonRight: pokemonRight,
+    });
+
     await getPokeTypes();
   };
 
@@ -82,14 +90,16 @@ function Game() {
     getPokemonsData();
   }, []);
 
+  // console.log(pokemonsInfo);
   return (
     <motion.div
       initial={{ width: 0 }}
       animate={{ width: "100%" }}
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
     >
-      <div>{poke1BaseXP}</div>
-      <div>{poke2BaseXP}</div>
+      This is game page
+      <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
+      <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
     </motion.div>
   );
 }
