@@ -1,0 +1,20 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokeImg {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.winner {
+  border-color: green;
+}
+
+.loser {
+  border-color: red;
+}

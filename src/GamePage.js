@@ -3,13 +3,16 @@ import { motion } from "framer-motion";
 import "./GamePage.css";
 import PokeCard from "./components/PokeCard/PokeCard";
 import axios from "axios";
+import { Flex, Button, Badge, Circle } from "@chakra-ui/react";
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
 function Game() {
   const [pokemonsInfo, setPokemonsInfo] = useState({});
-  let pokemonLeft;
-  let pokemonRight;
   const [poke1BaseXP, setPoke1BaseXP] = useState("");
   const [poke2BaseXP, setPoke2BaseXP] = useState("");
+
+  let pokemonLeft;
+  let pokemonRight;
   let poke1TypesURL;
   let poke2TypesURL;
   const poke1TypesList = [];
@@ -61,6 +64,7 @@ function Game() {
         poke1TypesList.push(res.data);
       });
     });
+
     poke2TypesURL.map((element, index) => {
       axios.get(element?.type?.url).then((res) => {
         poke2TypesList.push(res.data);
@@ -93,9 +97,67 @@ function Game() {
       animate={{ width: "100%" }}
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
     >
-      This is game page
-      <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
-      <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
+      <Flex direction="row" justifyContent="space-evenly" width="100%">
+        <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
+        <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        marginTop="4%"
+      >
+        <Button colorScheme="green" size="lg" width="17%">
+          Next
+        </Button>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        marginTop="4%"
+      >
+        <Badge ml="3" fontSize="1.2em" colorScheme="green">
+          player name
+        </Badge>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        marginTop="4%"
+      >
+        <Circle size="4em" bg="#C6F6D5" color="white"></Circle>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        marginTop="4%"
+      >
+        <Tabs variant="soft-rounded" colorScheme="green">
+          <TabList>
+            <Tab>Round 1</Tab>
+            <Tab>Round 2</Tab>
+            <Tab>Round 3</Tab>
+          </TabList>
+        </Tabs>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        marginTop="4%"
+      >
+        <Button
+          colorScheme="green"
+          size="lg"
+          width="17%"
+          style={{ borderRadius: "10px!important" }}
+        >
+          Reset
+        </Button>
+      </Flex>
     </motion.div>
   );
 }
