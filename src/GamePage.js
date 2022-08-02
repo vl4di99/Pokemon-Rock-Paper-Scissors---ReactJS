@@ -6,17 +6,32 @@ import axios from "axios";
 
 function Game() {
   const [pokemonsInfo, setPokemonsInfo] = useState({});
-  let pokemonLeft;
-  let pokemonRight;
-  const [poke1BaseXP, setPoke1BaseXP] = useState("");
-  const [poke2BaseXP, setPoke2BaseXP] = useState("");
-  let poke1TypesURL;
-  let poke2TypesURL;
+  const [scoreLeft, setScoreLeft] = useState("");
+  const [scoreRight, setScoreRight] = useState("");
+  const [winner, setWinner] = useState(null);
+
+  let poke1BaseXP = "";
+  let poke2BaseXP = "";
+
   const poke1TypesList = [];
   const poke2TypesList = [];
 
-  const randomPokemons = () => {
-    pokemonLeft = Math.floor(Math.random() * 151 + 1);
+  const doubleDamage = 2;
+  const halfDamage = 0.5;
+  const noDamage = 0;
+
+  const scoreP1 = [];
+  const scoreP2 = [];
+
+  const pokemonsBattleFunction = async () => {
+    scoreP1.length = 0;
+    scoreP2.length = 0;
+    poke1BaseXP = "";
+    poke2BaseXP = "";
+    setWinner("");
+    // This is for getting the random different pokemons and set those values to the component
+    let pokemonLeft = Math.floor(Math.random() * 151 + 1);
+    let pokemonRight = "";
     do {
       pokemonRight = Math.floor(Math.random() * 151 + 1);
     } while (pokemonLeft === pokemonRight);
@@ -24,16 +39,15 @@ function Game() {
       pokemonLeft: pokemonLeft,
       pokemonRight: pokemonRight,
     });
-  };
 
-  const getPokemonsData = async () => {
-    randomPokemons();
+    let pokemonLeftTypesURL = "";
+    let pokemonRightTypesURL = "";
+
     await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonLeft}/`)
       .then((res) => {
-        pokemonLeft = res.data;
-        setPoke1BaseXP(pokemonLeft.base_experience);
-        poke1TypesURL = pokemonLeft.types;
+        pokemonLeftTypesURL = res.data.types;
+        poke1BaseXP = res.data.base_experience;
       })
       .catch((err) => {
         console.log(err);
@@ -42,49 +56,107 @@ function Game() {
     await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonRight}/`)
       .then((res) => {
-        pokemonRight = res.data;
-        setPoke2BaseXP(pokemonRight.base_experience);
-        poke2TypesURL = pokemonRight.types;
+        pokemonRightTypesURL = res.data.types;
+        poke2BaseXP = res.data.base_experience;
       })
       .catch((err) => {
         console.log(err);
       });
 
-    await getPokeTypes();
+    await Promise.all(
+      await pokemonLeftTypesURL.map(async (element) => {
+        await axios.get(element?.type?.url).then((res) => {
+          poke1TypesList.push(res.data); // This approach is not working correctly
+        });
+      })
+    );
+
+    await Promise.all(
+      await pokemonRightTypesURL.map(async (element) => {
+        await axios.get(element?.type?.url).then((res) => {
+          poke2TypesList.push(res.data); // This approach is not working correctly
+        });
+      })
+    );
+
+    await gg(poke1TypesList, poke2TypesList);
   };
 
-  const getPokeTypes = async () => {
-    console.log("1: ", poke1TypesURL);
-    console.log("2: ", poke2TypesURL);
-    poke1TypesURL.map((element, index) => {
-      axios.get(element?.type?.url).then((res) => {
-        poke1TypesList.push(res.data);
+  async function gg(array1, array2) {
+    console.log("Dmg 1: ", array1);
+    console.log("Dmg 2: ", array2);
+    for (let i = 0; i < array1.length; i++) {
+      let ddfrom1 = array1[i].damage_relations.double_damage_from;
+      let ddto1 = array1[i].damage_relations.double_damage_to;
+      let hdfrom1 = array1[i].damage_relations.half_damage_from;
+      let hdto1 = array1[i].damage_relations.half_damage_to;
+      let ndfrom1 = array1[i].damage_relations.no_damage_from;
+      let ndto1 = array1[i].damage_relations.no_damage_to;
+      for (let j = 0; j < array2.length; j++) {
+        let ddfrom2 = array2[j].damage_relations.double_damage_from;
+        let ddto2 = array2[j].damage_relations.double_damage_to;
+        let hdfrom2 = array2[j].damage_relations.half_damage_from;
+        let hdto2 = array2[j].damage_relations.half_damage_to;
+        let ndfrom2 = array2[j].damage_relations.no_damage_from;
+        let ndto2 = array2[j].damage_relations.no_damage_to;
+        scoreCalculatorForP1(ddfrom1, ddto2, doubleDamage);
+        scoreCalculatorForP1(hdfrom1, hdto2, halfDamage);
+        scoreCalculatorForP1(ndfrom1, ndto2, noDamage);
+        scoreCalculatorForP2(ddto1, ddfrom2, doubleDamage);
+        scoreCalculatorForP2(hdto1, hdfrom2, halfDamage);
+        scoreCalculatorForP2(ndto1, ndfrom2, noDamage);
+      }
+    }
+    // await setScoreLeft(scoreP1.reduce((a, b) => a + b, 0));
+    //await setScoreRight(scoreP2.reduce((a, b) => a + b, 0));
+    await winnerCalculator(
+      scoreP1.reduce((a, b) => a + b, 0),
+      scoreP2.reduce((a, b) => a + b, 0)
+    );
+    //await Promise.all(scoreLeft, scoreRight);
+  }
+
+  const scoreCalculatorForP1 = (pokemon1, pokemon2, dmg) => {
+    pokemon1.map((p1) => {
+      pokemon2.map((p2) => {
+        if (p1.name === p2.name) {
+          scoreP1.push(dmg);
+        }
       });
     });
-    poke2TypesURL.map((element, index) => {
-      axios.get(element?.type?.url).then((res) => {
-        poke2TypesList.push(res.data);
-      });
-    });
-    console.log(poke1TypesList);
-    console.log(poke2TypesList);
-    calculateScore();
   };
 
-  const calculateScore = () => {
-    for (let i = 0; i < poke1TypesList.length; i++) {
-      for (let j = 0; j < poke2TypesList.length; j++) {
-        poke1TypesList[i].damage_relations.double_damage_from.map(
-          (element1) => {
-            console.log(element1);
-          }
-        );
+  const scoreCalculatorForP2 = (pokemon1, pokemon2, dmg) => {
+    pokemon1.map((p1) => {
+      pokemon2.map((p2) => {
+        if (p1.name === p2.name) {
+          scoreP2.push(dmg);
+        }
+      });
+    });
+  };
+
+  const winnerCalculator = (score1, score2) => {
+    setScoreLeft(score1);
+    setScoreRight(score2);
+    if (score1 > score2) {
+      setWinner("Left Pokemon Wins");
+    }
+    if (score1 < score2) {
+      setWinner("Right Pokemon Wins");
+    }
+
+    if (score1 === score2) {
+      if (poke1BaseXP > poke2BaseXP) {
+        setWinner("Draw. Winner is calculated by BaseXP => Left Wins");
+      } else if (poke1BaseXP < poke2BaseXP) {
+        setWinner("Draw. Winner is calculated by BaseXP => Right Wins");
       }
     }
   };
 
   useEffect(() => {
-    getPokemonsData();
+    pokemonsBattleFunction();
   }, []);
 
   return (
@@ -96,6 +168,15 @@ function Game() {
       This is game page
       <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
       <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
+      <div>
+        Left Poke Score: <b>{scoreLeft}</b> and Right Poke Score:{" "}
+        <b>{scoreRight}</b>
+      </div>
+      <div>
+        <b>
+          <i>{winner}</i>
+        </b>
+      </div>
     </motion.div>
   );
 }
