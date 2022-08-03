@@ -3,15 +3,24 @@ import { motion } from "framer-motion";
 import "./GamePage.css";
 import PokeCard from "./components/PokeCard/PokeCard";
 import axios from "axios";
-import { Flex, Button, Badge, Circle } from "@chakra-ui/react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import { Flex, Button, Circle } from "@chakra-ui/react";
+import { Tabs, TabList, Tab } from "@chakra-ui/react";
+import { useRecoilState } from "recoil";
+import { userSelectedState } from "./atoms/UserSelection";
+import { pokemonPointsState } from "./atoms/PokePoints";
+import { useNavigate } from "react-router-dom";
 
 function Game() {
+  const navigate = useNavigate();
+
+  const [tabsNumberOption, setTabsNumberOption] = useState(0);
+
   const [pokemonsInfo, setPokemonsInfo] = useState({});
 
   const [scoreLeft, setScoreLeft] = useState("");
   const [scoreRight, setScoreRight] = useState("");
-  const [winner, setWinner] = useState(null);
+  const [LeftWinner, setLeftWinner] = useState(false);
+  const [RightWinner, setRightWinner] = useState(false);
 
   let poke1BaseXP = "";
   let poke2BaseXP = "";
@@ -32,7 +41,7 @@ function Game() {
     scoreP2.length = 0;
     poke1BaseXP = "";
     poke2BaseXP = "";
-    setWinner("");
+
     // This is for getting the random different pokemons and set those values to the component
     let pokemonLeft = Math.floor(Math.random() * 151 + 1);
     let pokemonRight = "";
@@ -144,17 +153,21 @@ function Game() {
     setScoreLeft(score1);
     setScoreRight(score2);
     if (score1 > score2) {
-      setWinner("Left Pokemon Wins");
+      setLeftWinner(true);
+      setRightWinner(false);
     }
     if (score1 < score2) {
-      setWinner("Right Pokemon Wins");
+      setLeftWinner(false);
+      setRightWinner(true);
     }
 
     if (score1 === score2) {
       if (poke1BaseXP > poke2BaseXP) {
-        setWinner("Draw. Winner is calculated by BaseXP => Left Wins");
+        setLeftWinner(true);
+        setRightWinner(false);
       } else if (poke1BaseXP < poke2BaseXP) {
-        setWinner("Draw. Winner is calculated by BaseXP => Right Wins");
+        setLeftWinner(false);
+        setRightWinner(true);
       }
     }
   };
@@ -164,29 +177,64 @@ function Game() {
   }, []);
 
   const nextPoke = () => {
-    randomPokemons();
+    setUserSelected(false);
+    if (tabsNumberOption < 2) {
+      TabChange(tabsNumberOption);
+      pokemonsBattleFunction();
+    }
+    if (tabsNumberOption === 2) {
+      navigate("/score");
+    }
   };
+
+  function TabChange(index) {
+    setTabsNumberOption(index + 1);
+  }
+
+  const [userSelected, setUserSelected] = useRecoilState(userSelectedState);
+
+  function userMadeChoice() {
+    setUserSelected(true);
+  }
+
+  const [userPoints, setUserPoints] = useRecoilState(pokemonPointsState);
+  function winnerFunction() {
+    setUserPoints(userPoints + 1);
+  }
 
   return (
     <motion.div
       initial={{ width: 0 }}
       animate={{ width: "100%" }}
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
+      className="containerGame"
     >
       <Flex direction="row" justifyContent="space-evenly" width="100%">
-        <PokeCard pokemonImage={pokemonsInfo?.pokemonLeft} />
-        <PokeCard pokemonImage={pokemonsInfo?.pokemonRight} />
+        <PokeCard
+          pokemonImage={pokemonsInfo?.pokemonLeft}
+          isWinner={LeftWinner}
+          userMadeChoice={userMadeChoice}
+          winnerFunction={winnerFunction}
+        />
+        <PokeCard
+          pokemonImage={pokemonsInfo?.pokemonRight}
+          isWinner={RightWinner}
+          userMadeChoice={userMadeChoice}
+          winnerFunction={winnerFunction}
+        />
       </Flex>
       <Flex
         justifyContent="center"
         alignItems="center"
         direction="row"
-        marginTop="4%"
+        margin="4%"
       >
         <Button
           colorScheme="green"
+          letterSpacing="2px"
           size="lg"
-          width="17%"
+          width="20%"
+          marginLeft="2%"
           onClick={() => nextPoke()}
         >
           Next
@@ -196,27 +244,30 @@ function Game() {
         justifyContent="center"
         alignItems="center"
         direction="row"
-        marginTop="4%"
+        margin="2%"
+        marginTop="0.2%"
       >
-        <Badge ml="3" fontSize="1.2em" colorScheme="green">
-          player name
-        </Badge>
+        <Circle
+          size="5em"
+          bg="#C6F6D5"
+          color="black"
+          fontSize="1em"
+          fontWeight="bold"
+        >
+          {userPoints}
+        </Circle>
       </Flex>
       <Flex
         justifyContent="center"
         alignItems="center"
         direction="row"
-        marginTop="4%"
+        margin="1%"
       >
-        <Circle size="4em" bg="#C6F6D5" color="white"></Circle>
-      </Flex>
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-        marginTop="4%"
-      >
-        <Tabs variant="soft-rounded" colorScheme="green">
+        <Tabs
+          variant="soft-rounded"
+          colorScheme="green"
+          index={tabsNumberOption}
+        >
           <TabList>
             <Tab>Round 1</Tab>
             <Tab id="2" ariaSelected="true">
@@ -225,21 +276,6 @@ function Game() {
             <Tab>Round 3</Tab>
           </TabList>
         </Tabs>
-      </Flex>
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-        marginTop="4%"
-      >
-        <Button
-          colorScheme="green"
-          size="lg"
-          width="17%"
-          style={{ borderRadius: "10px!important" }}
-        >
-          Reset
-        </Button>
       </Flex>
     </motion.div>
   );

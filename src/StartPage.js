@@ -4,8 +4,14 @@ import { motion } from "framer-motion";
 import "./StartPage.css";
 
 import PokeBallImage from "./images/pokeball.png";
+import { Input } from "@chakra-ui/react";
+import { useRecoilState } from "recoil";
+import { usernameState } from "./atoms/PokePoints";
 
 function StartPage() {
+  const [username, setUsername] = useRecoilState(usernameState);
+  const handleChange = (event) => setUsername(event.target.value);
+
   return (
     <motion.div
       initial={{ width: 0 }}
@@ -20,6 +26,12 @@ function StartPage() {
           className="container__pokeball__image"
           width="400px"
           height="400px"
+        />
+        <Input
+          placeholder="User name"
+          size="lg"
+          value={username}
+          onChange={handleChange}
         />
         <div className="container__pokeball__button">
           <Link to="/game">Start Game</Link>

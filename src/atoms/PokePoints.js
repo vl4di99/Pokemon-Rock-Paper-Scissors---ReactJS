@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const pokemonPointsState = atom({
   key: "pokemonPoints",
-  default: [],
+  default: 0,
 });
 
 export const usernameState = atom({
