@@ -36,6 +36,8 @@ function Game() {
   const scoreP1 = [];
   const scoreP2 = [];
 
+  let pokemonsData = {};
+
   const pokemonsBattleFunction = async () => {
     scoreP1.length = 0;
     scoreP2.length = 0;
@@ -48,10 +50,6 @@ function Game() {
     do {
       pokemonRight = Math.floor(Math.random() * 151 + 1);
     } while (pokemonLeft === pokemonRight);
-    setPokemonsInfo({
-      pokemonLeft: pokemonLeft,
-      pokemonRight: pokemonRight,
-    });
 
     let pokemonLeftTypesURL = "";
     let pokemonRightTypesURL = "";
@@ -59,6 +57,7 @@ function Game() {
     await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonLeft}/`)
       .then((res) => {
+        pokemonsData = { ...pokemonsData, left: res.data };
         pokemonLeftTypesURL = res.data.types;
         poke1BaseXP = res.data.base_experience;
       })
@@ -69,6 +68,7 @@ function Game() {
     await axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonRight}/`)
       .then((res) => {
+        pokemonsData = { ...pokemonsData, right: res.data };
         pokemonRightTypesURL = res.data.types;
         poke2BaseXP = res.data.base_experience;
       })
@@ -92,12 +92,13 @@ function Game() {
       })
     );
 
+    setPokemonsInfo(pokemonsData);
     await gg(poke1TypesList, poke2TypesList);
   };
 
   async function gg(array1, array2) {
-    console.log("Dmg 1: ", array1);
-    console.log("Dmg 2: ", array2);
+    // console.log("Dmg 1: ", array1);
+    // console.log("Dmg 2: ", array2);
     for (let i = 0; i < array1.length; i++) {
       let ddfrom1 = array1[i].damage_relations.double_damage_from;
       let ddto1 = array1[i].damage_relations.double_damage_to;
@@ -209,15 +210,15 @@ function Game() {
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
       className="containerGame"
     >
-      <Flex direction="row" justifyContent="space-evenly" width="100%">
+      <Flex direction="row" justifyContent="space-evenly" width="100%" mt={5}>
         <PokeCard
-          pokemonImage={pokemonsInfo?.pokemonLeft}
+          data={pokemonsInfo.left}
           isWinner={LeftWinner}
           userMadeChoice={userMadeChoice}
           winnerFunction={winnerFunction}
         />
         <PokeCard
-          pokemonImage={pokemonsInfo?.pokemonRight}
+          data={pokemonsInfo.right}
           isWinner={RightWinner}
           userMadeChoice={userMadeChoice}
           winnerFunction={winnerFunction}
@@ -270,9 +271,7 @@ function Game() {
         >
           <TabList>
             <Tab>Round 1</Tab>
-            <Tab id="2" ariaSelected="true">
-              Round 2
-            </Tab>
+            <Tab id="2">Round 2</Tab>
             <Tab>Round 3</Tab>
           </TabList>
         </Tabs>
