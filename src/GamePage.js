@@ -27,6 +27,7 @@ function Game() {
 
   const poke1TypesList = [];
   const poke2TypesList = [];
+  let playerScore;
 
   const doubleDamage = 2;
   const halfDamage = 0.5;
@@ -269,7 +270,9 @@ function Game() {
         >
           <TabList>
             <Tab>Round 1</Tab>
-            <Tab>Round 2</Tab>
+            <Tab id="2" ariaSelected="true">
+              Round 2
+            </Tab>
             <Tab>Round 3</Tab>
           </TabList>
         </Tabs>
