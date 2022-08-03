@@ -17,6 +17,7 @@ function Game() {
   let poke2TypesURL;
   const poke1TypesList = [];
   const poke2TypesList = [];
+  let playerScore;
 
   const randomPokemons = () => {
     pokemonLeft = Math.floor(Math.random() * 151 + 1);
@@ -91,6 +92,10 @@ function Game() {
     getPokemonsData();
   }, []);
 
+  const nextPoke = () => {
+    randomPokemons();
+  };
+
   return (
     <motion.div
       initial={{ width: 0 }}
@@ -107,7 +112,12 @@ function Game() {
         direction="row"
         marginTop="4%"
       >
-        <Button colorScheme="green" size="lg" width="17%">
+        <Button
+          colorScheme="green"
+          size="lg"
+          width="17%"
+          onClick={() => nextPoke()}
+        >
           Next
         </Button>
       </Flex>
@@ -138,7 +148,9 @@ function Game() {
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>
             <Tab>Round 1</Tab>
-            <Tab>Round 2</Tab>
+            <Tab id="2" ariaSelected="true">
+              Round 2
+            </Tab>
             <Tab>Round 3</Tab>
           </TabList>
         </Tabs>
