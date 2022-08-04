@@ -17,8 +17,6 @@ function Game() {
 
   const [pokemonsInfo, setPokemonsInfo] = useState({});
 
-  const [scoreLeft, setScoreLeft] = useState("");
-  const [scoreRight, setScoreRight] = useState("");
   const [LeftWinner, setLeftWinner] = useState(false);
   const [RightWinner, setRightWinner] = useState(false);
 
@@ -27,7 +25,6 @@ function Game() {
 
   const poke1TypesList = [];
   const poke2TypesList = [];
-  let playerScore;
 
   const doubleDamage = 2;
   const halfDamage = 0.5;
@@ -151,8 +148,6 @@ function Game() {
   };
 
   const winnerCalculator = (score1, score2) => {
-    setScoreLeft(score1);
-    setScoreRight(score2);
     if (score1 > score2) {
       setLeftWinner(true);
       setRightWinner(false);
@@ -229,14 +224,19 @@ function Game() {
         alignItems="center"
         direction="row"
         margin="4%"
+        marginTop="15%"
       >
         <Button
-          colorScheme="green"
           letterSpacing="2px"
           size="lg"
           width="20%"
           marginLeft="2%"
           onClick={() => nextPoke()}
+          bg="#c8645c"
+          borderColor="#10dd30"
+          borderRadius="30px"
+          border="2px"
+          _hover={{ bg: "#dc9975", color: "green" }}
         >
           Next
         </Button>

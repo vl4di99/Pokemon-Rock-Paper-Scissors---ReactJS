@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import "./EndScreen.css";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { pokemonPointsState, usernameState } from "./atoms/PokePoints";
 import {
   Button,
@@ -25,14 +25,14 @@ function EndScreen() {
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
       className="containerEnd"
     >
-      <Flex direction="row" justifyContent="center">
-        <Tag backgroundColor="#ffec42" fontSize="4em" textAlign="center">
+      <Flex direction="row" justifyContent="center" marginTop="15%">
+        <Tag fontSize="4em" textAlign="center" bg="rgba(255,255,255,0)">
           Player: {username}
         </Tag>
       </Flex>
       <Flex direction="column" alignItems="center" justifyContent="center">
         <Stat size="lg">
-          <StatLabel fontSize="4em">Score</StatLabel>
+          <StatLabel fontSize="4em">Score:</StatLabel>
         </Stat>
       </Flex>
 
@@ -51,7 +51,11 @@ function EndScreen() {
           colorScheme="green"
           size="lg"
           width="30%"
-          style={{ borderRadius: "10px!important" }}
+          bg="#c8645c"
+          borderColor="#10dd30"
+          borderRadius="30px"
+          border="2px"
+          _hover={{ bg: "#dc9975", color: "green" }}
           onClick={() => {
             navigate("/");
             setUsername("");

@@ -26,11 +26,13 @@ export default function PokeCard({
     }
   };
 
+  /*
   const formatNumber = (number) => {
     let id = number.toString();
     while (id.length < 3) id = "0" + id;
     return id;
   };
+  */
 
   const cardColor = typeColors[data?.types[0]?.type?.name];
   const hoverColor = typeColors.hover[data?.types[0]?.type?.name];
