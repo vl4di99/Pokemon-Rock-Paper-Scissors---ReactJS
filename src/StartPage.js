@@ -31,6 +31,7 @@ function StartPage() {
           Please enter your username and Start the game
         </div>
         <Input
+          variant="filled"
           placeholder="User name"
           size="lg"
           value={username}

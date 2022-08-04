@@ -27,7 +27,7 @@ function EndScreen() {
     >
       <Flex direction="row" justifyContent="center" marginTop="15%">
         <Tag fontSize="4em" textAlign="center" bg="rgba(255,255,255,0)">
-          Player: {username}
+          Player {username}
         </Tag>
       </Flex>
       <Flex direction="column" alignItems="center" justifyContent="center">
@@ -38,7 +38,9 @@ function EndScreen() {
 
       <Flex direction="column" alignItems="center" justifyContent="center">
         <Stat size="lg">
-          <StatNumber fontSize="3em">{userScore}</StatNumber>
+          <StatNumber fontSize="3em" color="yellow">
+            {userScore}
+          </StatNumber>
         </Stat>
       </Flex>
       <Flex
