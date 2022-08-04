@@ -39,7 +39,7 @@ export default function PokeCard({
     <Box
       maxW="sm"
       borderRadius="lg"
-      className={`card ${
+      className={`card ${!userHasChosen && "hover-card"} ${
         selection ? (isWinner ? "winner" : "loser") : "img-border"
       }`}
       onClick={() => {
