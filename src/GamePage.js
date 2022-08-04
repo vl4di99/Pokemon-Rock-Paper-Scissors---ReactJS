@@ -225,7 +225,7 @@ function Game() {
         justifyContent="center"
         alignItems="center"
         direction="row"
-        margin="2%"
+        margin="1%"
       >
         <Circle
           size="5em"
@@ -242,7 +242,7 @@ function Game() {
         justifyContent="space-evenly"
         width="100%"
         mt={5}
-        marginTop="5%"
+        marginTop="2%"
       >
         <PokeCard
           data={pokemonsInfo.left}
@@ -258,17 +258,15 @@ function Game() {
         />
       </Flex>
       <Flex
-        justifyContent="center"
+        justifyContent="flex-end"
         alignItems="center"
-        direction="row"
-        margin="4%"
-        marginTop="10%"
+        direction="column"
+        marginTop="5%"
       >
         <Button
           letterSpacing="2px"
           size="lg"
           width="20%"
-          marginLeft="2%"
           onClick={() => nextPoke()}
           bg="#c8645c"
           borderColor="#10dd30"
@@ -278,18 +276,11 @@ function Game() {
         >
           Next
         </Button>
-      </Flex>
-
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-        margin="1%"
-      >
         <Tabs
           variant="soft-rounded"
           colorScheme="green"
           index={tabsNumberOption}
+          marginTop="3%"
         >
           <TabList>
             <Tab>Round 1</Tab>
