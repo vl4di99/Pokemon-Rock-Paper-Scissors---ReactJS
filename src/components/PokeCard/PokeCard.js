@@ -3,20 +3,20 @@ import { Box } from "@chakra-ui/react";
 import "./PokeCard.css";
 import { useRecoilValue } from "recoil";
 import { userSelectedState } from "../../atoms/UserSelection";
+import { typeColors } from "../../resources/colors";
 
 export default function PokeCard({
-  pokemonImage,
+  data,
   isWinner,
   userMadeChoice,
   winnerFunction,
 }) {
   const [selection, setSelection] = useState(false);
-
   const userHasChosen = useRecoilValue(userSelectedState);
 
   useEffect(() => {
     setSelection(false);
-  }, [pokemonImage]);
+  }, [data]);
 
   const handleSelection = () => {
     setSelection(true);
@@ -32,6 +32,9 @@ export default function PokeCard({
     return id;
   };
 
+  const cardColor = typeColors[data?.types[0]?.type?.name];
+  const hoverColor = typeColors.hover[data?.types[0]?.type?.name];
+
   return (
     <Box
       maxW="sm"
@@ -42,13 +45,13 @@ export default function PokeCard({
       onClick={() => {
         if (!userHasChosen) handleSelection();
       }}
+      bg={cardColor}
+      _hover={{ backgroundColor: hoverColor }}
     >
-      {pokemonImage && (
+      {data && (
         <div className="pokeImg">
           <img
-            src={`http://assets.pokemon.com/assets/cms2/img/pokedex/detail/${formatNumber(
-              pokemonImage
-            )}.png`}
+            src={data.sprites.other["official-artwork"].front_default}
             alt="Pokemon"
             width="215px"
             height="215px"
