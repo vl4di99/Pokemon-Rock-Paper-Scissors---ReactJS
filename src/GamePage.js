@@ -76,7 +76,7 @@ function Game() {
     await Promise.all(
       await pokemonLeftTypesURL.map(async (element) => {
         await axios.get(element?.type?.url).then((res) => {
-          poke1TypesList.push(res.data); // This approach is not working correctly
+          poke1TypesList.push(res.data);
         });
       })
     );
@@ -84,7 +84,7 @@ function Game() {
     await Promise.all(
       await pokemonRightTypesURL.map(async (element) => {
         await axios.get(element?.type?.url).then((res) => {
-          poke2TypesList.push(res.data); // This approach is not working correctly
+          poke2TypesList.push(res.data);
         });
       })
     );
@@ -94,8 +94,6 @@ function Game() {
   };
 
   async function gg(array1, array2) {
-    // console.log("Dmg 1: ", array1);
-    // console.log("Dmg 2: ", array2);
     for (let i = 0; i < array1.length; i++) {
       let ddfrom1 = array1[i].damage_relations.double_damage_from;
       let ddto1 = array1[i].damage_relations.double_damage_to;
@@ -118,13 +116,11 @@ function Game() {
         scoreCalculatorForP2(ndto1, ndfrom2, noDamage);
       }
     }
-    // await setScoreLeft(scoreP1.reduce((a, b) => a + b, 0));
-    //await setScoreRight(scoreP2.reduce((a, b) => a + b, 0));
+
     await winnerCalculator(
       scoreP1.reduce((a, b) => a + b, 0),
       scoreP2.reduce((a, b) => a + b, 0)
     );
-    //await Promise.all(scoreLeft, scoreRight);
   }
 
   const scoreCalculatorForP1 = (pokemon1, pokemon2, dmg) => {
