@@ -206,7 +206,7 @@ function Game() {
       className="containerGame"
     >
       <Flex
-        direction="row"
+        direction="column"
         justifyContent="space-evenly"
         width="100%"
         mt={5}
@@ -220,23 +220,24 @@ function Game() {
           <br />
           <span>The score will be displayed in the circle below</span>
         </div>
-      </Flex>
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-        margin="1%"
-      >
-        <Circle
-          size="5em"
-          bg="#C6F6D5"
-          color="black"
-          fontSize="1em"
-          fontWeight="bold"
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          direction="row"
+          margin="1%"
         >
-          {userPoints}
-        </Circle>
+          <Circle
+            size="5em"
+            bg="#C6F6D5"
+            color="black"
+            fontSize="1em"
+            fontWeight="bold"
+          >
+            {userPoints}
+          </Circle>
+        </Flex>
       </Flex>
+
       <Flex
         direction="row"
         justifyContent="space-evenly"

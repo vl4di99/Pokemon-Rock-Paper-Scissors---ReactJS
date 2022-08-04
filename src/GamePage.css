@@ -3,6 +3,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     background: #ffec42;
     background: -webkit-linear-gradient(top, rgba(255, 237, 68, 1.0), rgba(191, 132, 18, 1.0));
     background: -moz-linear-gradient(top, rgba(255, 237, 68, 1.0), rgba(191, 132, 18, 1.0));
