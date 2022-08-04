@@ -27,6 +27,9 @@ function StartPage() {
           width="400px"
           height="400px"
         />
+        <div className="container__pokeball__info">
+          Please enter your username and Start the game
+        </div>
         <Input
           placeholder="User name"
           size="lg"

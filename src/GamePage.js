@@ -205,7 +205,45 @@ function Game() {
       exit={{ x: window.innerWidth, transition: { duration: 0.5 } }}
       className="containerGame"
     >
-      <Flex direction="row" justifyContent="space-evenly" width="100%" mt={5}>
+      <Flex
+        direction="row"
+        justifyContent="space-evenly"
+        width="100%"
+        mt={5}
+        marginTop="3%"
+      >
+        <div className="containerGame__Info">
+          <span>
+            Choose the pokemon you think will win and press the next button.
+          </span>
+
+          <br />
+          <span>The score will be displayed in the circle below</span>
+        </div>
+      </Flex>
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        direction="row"
+        margin="2%"
+      >
+        <Circle
+          size="5em"
+          bg="#C6F6D5"
+          color="black"
+          fontSize="1em"
+          fontWeight="bold"
+        >
+          {userPoints}
+        </Circle>
+      </Flex>
+      <Flex
+        direction="row"
+        justifyContent="space-evenly"
+        width="100%"
+        mt={5}
+        marginTop="5%"
+      >
         <PokeCard
           data={pokemonsInfo.left}
           isWinner={LeftWinner}
@@ -224,7 +262,7 @@ function Game() {
         alignItems="center"
         direction="row"
         margin="4%"
-        marginTop="15%"
+        marginTop="10%"
       >
         <Button
           letterSpacing="2px"
@@ -241,23 +279,7 @@ function Game() {
           Next
         </Button>
       </Flex>
-      <Flex
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-        margin="2%"
-        marginTop="0.2%"
-      >
-        <Circle
-          size="5em"
-          bg="#C6F6D5"
-          color="black"
-          fontSize="1em"
-          fontWeight="bold"
-        >
-          {userPoints}
-        </Circle>
-      </Flex>
+
       <Flex
         justifyContent="center"
         alignItems="center"

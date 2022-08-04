@@ -55,8 +55,8 @@ export default function PokeCard({
           <img
             src={data.sprites.other["official-artwork"].front_default}
             alt="Pokemon"
-            width="215px"
-            height="215px"
+            width="250px"
+            height="250px"
           />
         </div>
       )}
